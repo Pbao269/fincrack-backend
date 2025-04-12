@@ -22,7 +22,7 @@ export class BanksService extends BaseService<BankRecommendation> {
   async getBankRecommendation(bankRecommendationDto: BankRecommendationDto, userId: string): Promise<BankRecommendationResponseDto> {
     try {
       // 1. Call external AI model API
-      const aiModelUrl = this.configService.get('AI_MODEL_URL') || 'https://api.yourbankaimodel.com/predict';
+      const aiModelUrl = this.configService.get('AI_MODEL_URL') || 'http://localhost:8000/predict';
       
       const response = await firstValueFrom(
         this.httpService.post<{ recommended_bank: string }>(aiModelUrl, bankRecommendationDto)

@@ -4,6 +4,9 @@ import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { BanksModule } from './banks/banks.module';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -15,6 +18,11 @@ import { BanksModule } from './banks/banks.module';
     BanksModule,
   ],
   controllers: [],
-  providers: []
+  providers: [
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: LoggingInterceptor,
+    },
+  ]
 })
 export class AppModule {}
