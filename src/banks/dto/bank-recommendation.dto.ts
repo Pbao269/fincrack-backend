@@ -104,4 +104,6 @@ export class BankRecommendationDto {
 
 export class BankRecommendationResponseDto {
   recommended_bank: string;
+  description?: string;
+  website?: string;
 } 

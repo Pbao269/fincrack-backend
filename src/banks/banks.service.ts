@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { BaseService } from '../common/base.service';
+import { BaseService, StringArrayMap } from '../common';
 import { BankRecommendation } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { HttpService } from '@nestjs/axios';
@@ -11,6 +11,30 @@ import { ConfigService } from '@nestjs/config';
 export class BanksService extends BaseService<BankRecommendation> {
   protected readonly modelName = 'bankRecommendation';
   
+  // Define the bank information map
+  private readonly bankInfoMap: StringArrayMap = new StringArrayMap([
+    ["Chase", [
+      "A leading global financial institution, Chase offers a wide range of services such as personal banking, credit cards, and investment products. It is known for its extensive branch network, innovative digital banking tools, and strong presence in both consumer and commercial banking sectors.",
+      "https://www.chase.com/"
+    ]],
+    ["Bank of America", [
+      "One of the largest banks in the United States, Bank of America provides comprehensive financial services including checking and savings accounts, credit cards, mortgages, and investment products. It has a significant national footprint and invests heavily in digital banking technology to enhance customer experience.",
+      "https://www.bankofamerica.com/"
+    ]],
+    ["Wells Fargo", [
+      "With a long history in American banking, Wells Fargo offers diverse services like retail banking, small business financing, mortgages, and wealth management. It is recognized for its wide branch network and commitment to community banking, despite undergoing reforms and modernization efforts over recent years.",
+      "https://www.wellsfargo.com/"
+    ]],
+    ["Capital One", [
+      "Capital One is known for its emphasis on credit and consumer lending, particularly in credit cards and auto loans. It leverages a technology-driven approach to deliver innovative banking services, focusing on a seamless digital experience along with its evolving physical branch presence.",
+      "https://www.capitalone.com/"
+    ]],
+    ["Citibank", [
+      "As the consumer division of Citigroup, Citibank offers global financial products and services, from everyday banking to investment and wealth management services. Its international reach and commitment to serving a diverse customer base distinguish it as a key player in global finance.",
+      "https://www.citi.com/"
+    ]]
+  ]);
+
   constructor(
     protected readonly prisma: PrismaService,
     protected readonly httpService: HttpService,
@@ -21,8 +45,24 @@ export class BanksService extends BaseService<BankRecommendation> {
 
   async getBankRecommendation(bankRecommendationDto: BankRecommendationDto, userId: string): Promise<BankRecommendationResponseDto> {
     try {
-      // 1. Call external AI model API
-      const aiModelUrl = this.configService.get('AI_MODEL_URL') || 'http://localhost:8000/predict';
+      // Get the current environment
+      const nodeEnv = this.configService.get('NODE_ENV') || 'development';
+      
+      // Select the appropriate URL based on environment
+      let aiModelUrl: string;
+      if (nodeEnv === 'production') {
+        aiModelUrl = this.configService.get('BANK_RECOMMENDATION_PROD_URL') || '';
+      } else {
+        aiModelUrl = this.configService.get('BANK_RECOMMENDATION_DEV_URL') || '';
+      }
+      
+      // Fallback to legacy URL if neither environment-specific URL is available
+      if (!aiModelUrl) {
+        aiModelUrl = this.configService.get('AI_MODEL_URL') || 'http://localhost:8000/predict';
+      }
+      
+      // Log which URL we're using
+      console.log(`Using bank recommendation URL for ${nodeEnv} environment: ${aiModelUrl}`);
       
       const response = await firstValueFrom(
         this.httpService.post<{ recommended_bank: string }>(aiModelUrl, bankRecommendationDto)
@@ -64,8 +104,17 @@ export class BanksService extends BaseService<BankRecommendation> {
         recommendedBank
       });
       
-      // 3. Return the response
-      return { recommended_bank: recommendedBank };
+      // 3. Retrieve additional info from map
+      const bankInfo = this.bankInfoMap.get(recommendedBank);
+      const description = bankInfo?.[0];
+      const website = bankInfo?.[1];
+      
+      // 4. Return the combined response
+      return {
+        recommended_bank: recommendedBank,
+        description: description,
+        website: website
+      };
       
     } catch (error) {
       // Handle API call errors and other exceptions

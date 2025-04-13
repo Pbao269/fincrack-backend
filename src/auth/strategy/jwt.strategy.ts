@@ -41,6 +41,9 @@ export class JwtStrategy extends PassportStrategy(
         where: {
           id: payload.sub,
         },
+        include: {
+          bankRecommendations: true,
+        },
       });
       
     if (!user) {
