@@ -19,6 +19,7 @@ export class BanksController extends BaseController<BankRecommendation> {
     @Body() bankRecommendationDto: BankRecommendationDto,
     @GetUser() user: User,
   ): Promise<BankRecommendationResponseDto> {
+    console.log(`[${new Date().toISOString()}] Bank recommendation route triggered - User ID: ${user.id}, Email: ${user.email}`);
     return this.banksService.getBankRecommendation(bankRecommendationDto, user.id);
   }
 }
