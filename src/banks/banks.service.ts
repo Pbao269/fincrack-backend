@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { BaseService, StringArrayMap } from '../common';
+import { BaseService, StringArrayMap } from '@/common';
 import { BankRecommendation } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { HttpService } from '@nestjs/axios';

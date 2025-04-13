@@ -77,6 +77,46 @@ $ npm run start:prod
 - `POST /auth/signup` - Register a new user
 - `POST /auth/login` - User login
 - `GET /users/me` - Get current user info (Protected)
+- `POST /banks/recommendation` - Get personalized bank recommendation (Protected)
+
+### Bank Recommendation Endpoint
+
+The `/banks/recommendation` endpoint accepts a POST request with the following parameters:
+
+```json
+{
+  "Digital Interface Rank": 4,             // Integer 1-5
+  "Number of Branches": 3,                 // Integer value
+  "Green Initiatives Rank": 5,             // Integer 1-5
+  "Fee Level Rank": 2,                     // Integer 1-5
+  "International Support Rank": 4,         // Integer 1-5
+  "Interest Rate Range Rank": 3,           // Integer 1-5
+  "Customer Service Quality Rank": 5,      // Integer 1-5
+  "Capital Adequacy Rank": 4,              // Integer 1-5
+  "Auto Loans": true,                      // Boolean
+  "Credit Cards": true,                    // Boolean
+  "Global Banking": false,                 // Boolean
+  "Investments": true,                     // Boolean
+  "Loans": true,                           // Boolean
+  "Mortgages": false,                      // Boolean
+  "Savings Accounts": true,                // Boolean
+  "Global Customers": false,               // Boolean
+  "Professionals": true,                   // Boolean
+  "SMEs": false,                           // Boolean
+  "Seniors": false,                        // Boolean
+  "Students": true,                        // Boolean
+  "Tech-Savvy": true                       // Boolean
+}
+```
+
+The endpoint returns:
+```json
+{
+  "recommended_bank": "Bank Name",        // String
+  "description": "Description of the bank...",  // String
+  "website": "https://bank-website.com"   // String URL
+}
+```
 
 ## Project Structure
 
@@ -86,6 +126,8 @@ fincrackbackend/
 │   ├── auth/                # Authentication module
 │   ├── prisma/              # Prisma service and module
 │   ├── user/                # User module
+│   ├── banks/               # Banks module with recommendation functionality
+│   ├── common/              # Shared utilities, base classes, and interceptors
 │   ├── app.module.ts        # Main application module
 │   └── main.ts              # Application entry point
 ├── prisma/                  # Prisma schema
