@@ -1,7 +1,6 @@
-import {
-  createParamDecorator,
-  ExecutionContext,
-} from '@nestjs/common';
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 import { Request } from 'express';
 
 interface RequestWithUser extends Request {
@@ -9,13 +8,8 @@ interface RequestWithUser extends Request {
 }
 
 export const GetUser = createParamDecorator(
-  (
-    data: string | undefined,
-    ctx: ExecutionContext,
-  ) => {
-    const request = ctx
-    .switchToHttp()
-    .getRequest<RequestWithUser>();
+  (data: string | undefined, ctx: ExecutionContext) => {
+    const request = ctx.switchToHttp().getRequest<RequestWithUser>();
 
     if (!request.user) {
       return null;
