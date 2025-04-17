@@ -79,4 +79,4 @@ export class StringArrayMap {
   get size(): number {
     return this.data.size;
   }
-} 
+}

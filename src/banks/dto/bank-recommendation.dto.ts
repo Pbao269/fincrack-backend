@@ -1,4 +1,11 @@
-import { IsBoolean, IsInt, IsNotEmpty, IsNumber, Max, Min } from 'class-validator';
+import {
+  IsBoolean,
+  IsInt,
+  IsNotEmpty,
+  IsNumber,
+  Max,
+  Min,
+} from 'class-validator';
 import { Transform } from 'class-transformer';
 
 export class BankRecommendationDto {
@@ -106,4 +113,4 @@ export class BankRecommendationResponseDto {
   recommended_bank: string;
   description?: string;
   website?: string;
-} 
+}

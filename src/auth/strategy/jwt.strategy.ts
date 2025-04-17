@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
-import {
-  ExtractJwt,
-  Strategy,
-} from 'passport-jwt';
+import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PrismaService } from '../../prisma/prisma.service';
 import { User } from '@prisma/client';
 
@@ -12,10 +13,7 @@ import { User } from '@prisma/client';
 type SafeUser = Omit<User, 'hash'>;
 
 @Injectable()
-export class JwtStrategy extends PassportStrategy(
-  Strategy,
-  'jwt',
-) {
+export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   constructor(
     config: ConfigService,
     private prisma: PrismaService,
@@ -24,10 +22,9 @@ export class JwtStrategy extends PassportStrategy(
     if (!jwtSecret) {
       throw new Error('JWT_SECRET is not defined in environment variables');
     }
-    
+
     super({
-      jwtFromRequest:
-        ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       secretOrKey: jwtSecret as string,
     });
   }
@@ -36,20 +33,19 @@ export class JwtStrategy extends PassportStrategy(
     sub: string;
     email: string;
   }): Promise<SafeUser | null> {
-    const user =
-      await this.prisma.user.findUnique({
-        where: {
-          id: payload.sub,
-        },
-        include: {
-          bankRecommendations: true,
-        },
-      });
-      
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id: payload.sub,
+      },
+      include: {
+        bankRecommendations: true,
+      },
+    });
+
     if (!user) {
       return null;
     }
-    
+
     // Remove the hash property
     const { hash, ...result } = user;
     return result;
