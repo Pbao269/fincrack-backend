@@ -1,15 +1,18 @@
 {
   "version": 2,
+  "buildCommand": "npm run build && npx prisma generate", 
+  "outputDirectory": "dist",
+  "installCommand": "npm install --production=false",
   "builds": [
     {
-      "src": "src/main.ts",
+      "src": "dist/main.js",
       "use": "@vercel/node"
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "src/main.ts",
+      "dest": "dist/main.js",
       "headers": {
         "Access-Control-Allow-Credentials": "true",
         "Access-Control-Allow-Origin": "*",
