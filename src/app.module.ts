@@ -6,7 +6,8 @@ import { ConfigModule } from '@nestjs/config';
 import { BanksModule } from './banks/banks.module';
 import { ChatbotModule } from './chatbot/chatbot.module';
 import { APP_INTERCEPTOR } from '@nestjs/core';
-import { LoggingInterceptor } from './common'; // Changed from '@/common' to relative path
+import { LoggingInterceptor } from './common';
+import { AppController } from './app.controller'; // Import the new controller
 
 @Module({
   imports: [
@@ -19,7 +20,7 @@ import { LoggingInterceptor } from './common'; // Changed from '@/common' to rel
     BanksModule,
     ChatbotModule,
   ],
-  controllers: [],
+  controllers: [AppController], // Add AppController here
   providers: [
     {
       provide: APP_INTERCEPTOR,
