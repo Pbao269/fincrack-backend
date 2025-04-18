@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Body, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
 import { BaseService } from './base.service';
 import { IdParamDto, PaginationDto } from './base.dto';
@@ -8,11 +9,11 @@ export abstract class BaseController<T> {
   @Get()
   async findAll(@Query() query: PaginationDto) {
     const { skip, take, orderBy, orderDirection } = query;
-    
+
     let orderByObj: Record<string, 'asc' | 'desc'> | undefined = undefined;
     if (orderBy) {
       orderByObj = {
-        [orderBy]: orderDirection || 'asc'
+        [orderBy]: orderDirection || 'asc',
       };
     }
 
@@ -46,10 +47,7 @@ export abstract class BaseController<T> {
   }
 
   @Put(':id')
-  async update(
-    @Param() params: IdParamDto,
-    @Body() updateDto: any,
-  ) {
+  async update(@Param() params: IdParamDto, @Body() updateDto: any) {
     return this.baseService.update(params.id, updateDto);
   }
 

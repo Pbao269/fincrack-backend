@@ -30,4 +30,4 @@ export class PaginationDto {
 export class IdParamDto {
   @IsString()
   id: string;
-} 
+}

@@ -1,9 +1,9 @@
-import { BaseController } from '@/common';
+import { BaseController } from '../common'; // Changed from '@/common'
 import { BankRecommendation } from '@prisma/client';
 import { BanksService } from './banks.service';
-import { JwtAuthGuard } from '@/auth/guard';
+import { JwtAuthGuard } from '../auth/guard'; // Changed from '@/auth/guard'
 import { Body, Post, UseGuards, Controller } from '@nestjs/common';
-import { GetUser } from '@/auth/decorator';
+import { GetUser } from '../auth/decorator'; // Changed from '@/auth/decorator'
 import { User } from '@prisma/client';
 import { BankRecommendationDto, BankRecommendationResponseDto } from './dto';
 

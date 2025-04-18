@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Injectable } from '@nestjs/common';
-import { BaseService, StringArrayMap } from '@/common';
+import { BaseService, StringArrayMap } from '../common'; // Changed from '@/common'
 import { BankRecommendation } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { HttpService } from '@nestjs/axios';
